@@ -1,6 +1,7 @@
 import './style.css';
 import './mobile.css';
 import './form-r2.css';
+import './ma-brand.css';
 
 // GitHub Pages build revision: assets are resolved relative to the page.
 
@@ -103,7 +104,7 @@ form.addEventListener('submit', (event) => {
   const { firstName, lastName } = splitName(fullName);
   const eventId = createEventId();
   const message = [
-    'Olá, Auto Prime! Fiz uma simulação pelo site:',
+    'Olá, MA Comércio! Fiz uma simulação pelo site:',
     '',
     `Nome: ${fullName}`,
     `WhatsApp: ${whatsapp}`,
@@ -153,7 +154,7 @@ form.addEventListener('submit', (event) => {
           fbc: getCookie('_fbc'),
         },
         custom_data: {
-          content_name: 'Simulador Auto Prime',
+          content_name: 'Simulador MA Comércio',
           content_category: 'Veículos',
           lead_type: 'simulador_autoprime',
           value: Number(data.get('valor')),

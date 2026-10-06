@@ -1,6 +1,6 @@
-# Auto Prime | Simulador de veículos
+# MA Comércio | Simulador de veículos
 
-Landing page e simulador comercial da Auto Prime Santarém.
+Landing page e simulador comercial da MA Comércio Santarém.
 
 ## Desenvolvimento
 
