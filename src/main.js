@@ -2,6 +2,7 @@ import './style.css';
 import './mobile.css';
 import './form-r2.css';
 import './ma-brand.css';
+import './form-ma-modern.css';
 
 // GitHub Pages build revision: assets are resolved relative to the page.
 

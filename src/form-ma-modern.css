@@ -1,0 +1,260 @@
+/* Camada visual exclusiva do simulador MA Comércio. */
+:root {
+  --form-surface: var(--white);
+  --form-soft: #fff8f4;
+  --form-line: #eadfd8;
+  --form-muted: #7c6960;
+  --form-radius: 20px;
+  --form-radius-sm: 14px;
+  --form-shadow: 0 22px 60px rgba(68, 32, 20, 0.1);
+}
+
+.simulator-section {
+  background: linear-gradient(180deg, #fff 0%, #fffaf7 100%);
+}
+
+.simulator {
+  max-width: 860px;
+  border: 1px solid var(--form-line);
+  border-radius: var(--form-radius);
+  box-shadow: var(--form-shadow);
+  overflow: hidden;
+}
+
+.simulator .form-top {
+  padding: 24px 34px 18px;
+}
+
+.simulator .form-top > span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: var(--form-soft);
+  color: var(--orange-dark);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.simulator .form-top > strong,
+.simulator:not([data-current-step="0"]) #step-title {
+  color: var(--form-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.simulator .progress-track {
+  height: 5px;
+  background: #f1e9e4;
+}
+
+.simulator .progress-track span {
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(90deg, var(--orange), #f18a51);
+}
+
+.simulator .form-body {
+  min-height: 408px;
+  padding: 34px 42px 28px;
+}
+
+.form-step .step-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--form-soft);
+  color: var(--orange-dark);
+  font-size: 16px;
+}
+
+.form-step h3,
+.form-step:not([data-step="0"]) h3 {
+  margin: 15px 0 8px;
+  color: var(--ink);
+  font-size: clamp(24px, 3vw, 31px);
+  line-height: 1.1;
+}
+
+.form-step .step-sub {
+  max-width: 520px;
+  color: var(--form-muted);
+  line-height: 1.55;
+}
+
+.goal-grid {
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.goal,
+.choice-card {
+  border: 1px solid var(--form-line);
+  border-radius: var(--form-radius-sm);
+  background: var(--form-surface);
+  box-shadow: none;
+}
+
+.goal {
+  min-height: 126px;
+  padding: 18px;
+}
+
+.goal:hover,
+.choice-card:hover {
+  border-color: #e8a37c;
+  background: #fffdfc;
+  transform: translateY(-2px);
+}
+
+.goal:has(input:checked),
+.choice-card:has(input:checked) {
+  border-color: var(--orange);
+  background: var(--form-soft);
+  box-shadow: inset 0 0 0 1px var(--orange);
+}
+
+.goal:focus-within,
+.choice-card:focus-within,
+.contact-fields input:focus-visible,
+.form-next:focus-visible,
+.form-back:focus-visible {
+  outline: 3px solid rgba(229, 102, 35, 0.25);
+  outline-offset: 3px;
+}
+
+.goal-symbol,
+.choice-icon,
+.time-chip {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: #f8efe9;
+  color: var(--orange-dark);
+}
+
+.goal-symbol {
+  display: grid;
+  place-items: center;
+}
+
+.goal strong,
+.choice-copy strong {
+  color: var(--ink);
+}
+
+.goal i,
+.choice-card > i {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border-color: #d9cfc9;
+}
+
+.choice-stack {
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.choice-card {
+  min-height: 76px;
+  padding: 13px 16px;
+}
+
+.choice-copy small {
+  color: var(--form-muted);
+}
+
+.choice-badge {
+  border-radius: 999px;
+  background: #f6ede8;
+  color: var(--orange-dark);
+  padding: 6px 9px;
+}
+
+.time-chip {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.contact-fields {
+  margin-top: 26px;
+}
+
+.contact-fields label > span {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.contact-fields input {
+  height: 54px;
+  border: 1px solid var(--form-line);
+  border-radius: 12px;
+  background: #fff;
+  padding: 0 16px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.contact-fields input::placeholder {
+  color: #a8968d;
+}
+
+.contact-fields input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 4px rgba(229, 102, 35, 0.12);
+}
+
+.privacy {
+  color: var(--form-muted);
+}
+
+.simulator .form-actions {
+  min-height: 84px;
+  padding: 18px 28px;
+  border-top-color: var(--form-line);
+  background: #fffdfc;
+}
+
+.form-back {
+  min-height: 46px;
+  padding: 0 12px;
+  border-radius: 10px;
+  color: var(--form-muted);
+}
+
+.form-back:hover:not(:disabled) {
+  background: #f7eee9;
+  color: var(--ink);
+}
+
+.form-next {
+  min-height: 48px;
+  border-radius: 12px;
+  padding: 0 21px;
+  background: var(--orange);
+  box-shadow: 0 9px 20px rgba(229, 102, 35, 0.19);
+}
+
+.form-next:hover:not(:disabled) {
+  background: var(--orange-dark);
+  box-shadow: 0 12px 24px rgba(184, 66, 16, 0.2);
+}
+
+@media (max-width: 600px) {
+  .simulator { border-radius: 16px; }
+  .simulator .form-top { padding: 20px 20px 16px; }
+  .simulator .form-body { min-height: 500px; padding: 28px 20px 22px; }
+  .goal { min-height: 108px; }
+  .choice-card { min-height: 70px; padding: 11px 13px; }
+  .simulator .form-actions { padding: 14px 16px; }
+  .form-next { padding: 0 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goal, .choice-card, .contact-fields input, .form-next { transition: none; }
+}
