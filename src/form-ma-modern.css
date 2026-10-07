@@ -14,30 +14,26 @@
 }
 
 .simulator {
-  max-width: 980px;
-  border: 0;
+  max-width: 860px;
+  border: 1px solid var(--form-line);
   border-radius: var(--form-radius);
-  box-shadow: none;
-  overflow: visible;
-  background: transparent;
-  display: grid;
-  grid-template-columns: 208px minmax(0, 1fr);
-  gap: 14px 22px;
-  align-items: start;
+  box-shadow: var(--form-shadow);
+  overflow: hidden;
+  background: var(--form-surface);
+  display: block;
 }
 
 .simulator .form-top {
-  grid-column: 1;
   width: 100%;
-  min-height: 136px;
+  min-height: auto;
   margin: 0;
-  padding: 27px 23px;
-  border: 1px solid var(--form-line);
-  border-radius: 24px;
-  background: linear-gradient(145deg, #fff 0%, #fff6f1 100%);
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 13px;
+  padding: 22px 30px 14px;
+  border: 0;
+  border-radius: 0;
+  background: var(--form-surface);
+  align-items: center;
+  flex-direction: row;
+  gap: 16px;
 }
 
 .simulator .form-top > span {
@@ -60,7 +56,6 @@
 }
 
 .simulator .progress-track {
-  grid-column: 1;
   width: 100%;
   height: 8px;
   margin: 0;
@@ -74,16 +69,14 @@
 }
 
 .simulator .form-body {
-  grid-column: 2;
-  grid-row: 1 / span 2;
   min-height: 408px;
   width: 100%;
   margin: 0;
   padding: 42px 44px;
-  border: 1px solid var(--form-line);
-  border-radius: 28px;
+  border: 0;
+  border-radius: 0;
   background: var(--form-surface);
-  box-shadow: var(--form-shadow);
+  box-shadow: none;
 }
 
 .form-step .step-icon {
@@ -241,13 +234,12 @@
 }
 
 .simulator .form-actions {
-  grid-column: 2;
   min-height: 70px;
   width: 100%;
   margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
+  padding: 18px 28px;
+  border-top: 1px solid var(--form-line);
+  background: #fffdfc;
 }
 
 .form-back {
@@ -277,12 +269,12 @@
 
 @media (max-width: 600px) {
   .simulator { display: block; border-radius: 22px; }
-  .simulator .form-top { width: 100%; min-height: auto; margin: 0 0 12px; padding: 19px 20px 14px; }
-  .simulator .progress-track { width: 100%; margin: 0 0 12px; }
+  .simulator .form-top { width: 100%; min-height: auto; margin: 0; padding: 19px 20px 14px; }
+  .simulator .progress-track { width: 100%; margin: 0; }
   .simulator .form-body { width: 100%; min-height: 500px; margin: 0; padding: 28px 20px 22px; }
   .goal { min-height: 108px; }
   .choice-card { min-height: 70px; padding: 11px 13px; }
-  .simulator .form-actions { width: 100%; margin-top: 14px; padding: 0; }
+  .simulator .form-actions { width: 100%; margin: 0; padding: 14px 16px; }
   .form-next { padding: 0 16px; }
 }
 
