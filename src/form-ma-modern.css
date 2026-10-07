@@ -118,6 +118,9 @@
 .goal {
   min-height: 132px;
   padding: 18px;
+  grid-template-columns: 42px minmax(0, 1fr) 22px;
+  column-gap: 14px;
+  align-items: center;
 }
 
 .goal:hover,
@@ -161,6 +164,11 @@
 .goal strong,
 .choice-copy strong {
   color: var(--ink);
+}
+
+.goal strong {
+  min-width: 0;
+  padding-left: 0;
 }
 
 .goal i,
