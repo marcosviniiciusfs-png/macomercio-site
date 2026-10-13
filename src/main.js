@@ -14,7 +14,7 @@ const submitButton = document.querySelector('#submit-button');
 const stepLabel = document.querySelector('#step-label');
 const stepTitle = document.querySelector('#step-title');
 const progressBar = document.querySelector('#progress-bar');
-const titles = ['Seu objetivo', 'Valor desejado', 'Entrada disponível', 'Parcela mensal', 'Prazo', 'Seus dados'];
+const titles = ['Unidade de atendimento', 'Seu objetivo', 'Valor desejado', 'Entrada disponível', 'Parcela mensal', 'Prazo', 'Seus dados'];
 const metaCapiUrl = import.meta.env.VITE_META_CAPI_URL;
 const attributionKeys = [
   'origem_conta',
@@ -102,6 +102,7 @@ form.addEventListener('submit', (event) => {
   const fullName = String(data.get('nome'));
   const whatsapp = String(data.get('whatsapp'));
   const city = String(data.get('cidade'));
+  const unit = String(data.get('unidade'));
   const { firstName, lastName } = splitName(fullName);
   const eventId = createEventId();
   const message = [
@@ -110,6 +111,7 @@ form.addEventListener('submit', (event) => {
     `Nome: ${fullName}`,
     `WhatsApp: ${whatsapp}`,
     `Cidade: ${city}`,
+    `Unidade desejada: ${unit}`,
     `Objetivo: ${data.get('objetivo')}`,
     `Valor aproximado: ${Number(data.get('valor')).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}`,
     `Entrada disponível: ${data.get('entrada')}`,
@@ -137,6 +139,7 @@ form.addEventListener('submit', (event) => {
           nome: fullName,
           whatsapp,
           cidade: city,
+          unidade: unit,
           objetivo: data.get('objetivo'),
           valor: Number(data.get('valor')),
           entrada: data.get('entrada'),

@@ -69,10 +69,17 @@
           <p>Leva menos de dois minutos. No final, suas respostas seguem direto para o WhatsApp da MA Comércio.</p>
         </div>
         <form class="simulator reveal" id="vehicle-form">
-          <div class="form-top"><span id="step-label">ETAPA 1 DE 6</span><strong id="step-title">Seu objetivo</strong></div>
+          <div class="form-top"><span id="step-label">ETAPA 1 DE 7</span><strong id="step-title">Unidade de atendimento</strong></div>
           <div class="progress-track"><span id="progress-bar"></span></div>
           <div class="form-body">
             <div class="form-step is-active" data-step="0">
+              <span class="step-icon" aria-hidden="true">⌖</span><h3>Onde você quer ser atendido?</h3><p class="step-sub">Escolha a unidade da MA Comércio mais conveniente para você.</p>
+              <div class="goal-grid location-grid">
+                <label class="goal"><input type="radio" name="unidade" value="MA Comércio Santarém" /><span class="goal-symbol" aria-hidden="true">STM</span><strong>MA Comércio Santarém</strong><i>✓</i></label>
+                <label class="goal"><input type="radio" name="unidade" value="MA Comércio Manaus" /><span class="goal-symbol" aria-hidden="true">MAO</span><strong>MA Comércio Manaus</strong><i>✓</i></label>
+              </div>
+            </div>
+            <div class="form-step" data-step="1">
               <span class="step-icon" aria-hidden="true">✦</span><h3>Qual é o seu objetivo?</h3><p class="step-sub">Escolha a opção que mais combina com o seu momento.</p>
               <div class="goal-grid">
                 <label class="goal"><input type="radio" name="objetivo" value="Crédito para veículo" /><span class="goal-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 10 1.4-3.5A2.4 2.4 0 0 1 8.6 5h6.8a2.4 2.4 0 0 1 2.2 1.5L19 10"/><rect x="3" y="10" width="18" height="8" rx="2"/><path d="M5 18v2M19 18v2M7 14h.01M17 14h.01M3 12l-1-1M21 12l1-1"/></svg></span><strong>Crédito para veículo</strong><i>✓</i></label>
@@ -81,7 +88,7 @@
                 <label class="goal"><input type="radio" name="objetivo" value="Outros planos" /><span class="goal-symbol">+</span><strong>Outros planos</strong><i>✓</i></label>
               </div>
             </div>
-            <div class="form-step" data-step="1">
+            <div class="form-step" data-step="2">
               <span class="step-icon" aria-hidden="true">$</span><h3>Qual valor de crédito você está buscando?</h3><p class="step-sub">Escolha a faixa mais próxima do seu objetivo.</p>
               <div class="choice-stack">
                 <label class="choice-card"><input type="radio" name="valor" value="40000" /><span class="choice-icon">$</span><span class="choice-copy"><strong>Até R$ 50 mil</strong><small>Uma opção acessível para começar</small></span><i>✓</i></label>
@@ -90,7 +97,7 @@
                 <label class="choice-card"><input type="radio" name="valor" value="150000" /><span class="choice-icon">$</span><span class="choice-copy"><strong>Acima de R$ 120 mil</strong><small>Um crédito maior para grandes planos</small></span><i>✓</i></label>
               </div>
             </div>
-            <div class="form-step" data-step="2">
+            <div class="form-step" data-step="3">
               <span class="step-icon" aria-hidden="true">◇</span><h3>Quanto você consegue separar de entrada?</h3><p class="step-sub">Escolha uma faixa que faça sentido hoje.</p>
               <div class="choice-stack">
                 <label class="choice-card"><input type="radio" name="entrada" value="Até R$ 5 mil" /><span class="choice-icon">$</span><span class="choice-copy"><strong>Até R$ 5 mil</strong><small>Tenho pouco separado agora</small></span><b class="choice-badge">Até 5k</b></label>
@@ -99,7 +106,7 @@
                 <label class="choice-card"><input type="radio" name="entrada" value="Acima de R$ 40 mil" /><span class="choice-icon">$</span><span class="choice-copy"><strong>Acima de R$ 40 mil</strong><small>Consigo separar mais de R$ 40 mil</small></span><b class="choice-badge">40k+</b></label>
               </div>
             </div>
-            <div class="form-step" data-step="3">
+            <div class="form-step" data-step="4">
               <span class="step-icon" aria-hidden="true">$</span><h3>Qual parcela mensal fica ideal para você?</h3><p class="step-sub">Marque a faixa que cabe melhor no seu planejamento.</p>
               <div class="choice-stack">
                 <label class="choice-card"><input type="radio" name="parcela" value="Até R$ 1.000" /><span class="choice-icon">$</span><span class="choice-copy"><strong>Até R$ 1.000</strong><small>Quero manter a parcela mais leve</small></span><i>✓</i></label>
@@ -108,7 +115,7 @@
                 <label class="choice-card"><input type="radio" name="parcela" value="Acima de R$ 3.500" /><span class="choice-icon">$</span><span class="choice-copy"><strong>Acima de R$ 3.500</strong><small>Quero priorizar prazo e condições</small></span><i>✓</i></label>
               </div>
             </div>
-            <div class="form-step" data-step="4">
+            <div class="form-step" data-step="5">
               <span class="step-icon" aria-hidden="true">◷</span><h3>Quando você pretende fechar negócio?</h3><p class="step-sub">Escolha o prazo mais próximo do seu momento.</p>
               <div class="choice-stack timing-stack">
                 <label class="choice-card"><input type="radio" name="prazo" value="O quanto antes" /><span class="time-chip">AGORA</span><span class="choice-copy"><strong>O quanto antes</strong><small>Já quero conhecer as opções</small></span><i>✓</i></label>
@@ -117,7 +124,7 @@
                 <label class="choice-card"><input type="radio" name="prazo" value="Ainda estou pesquisando" /><span class="time-chip">IDEIA</span><span class="choice-copy"><strong>Ainda estou pesquisando</strong><small>Quero entender as possibilidades</small></span><i>✓</i></label>
               </div>
             </div>
-            <div class="form-step" data-step="5">
+            <div class="form-step" data-step="6">
               <span class="step-icon" aria-hidden="true">○</span><h3>Para quem preparamos este atendimento?</h3><p class="step-sub">Preencha seus dados para abrir a conversa com a MA Comércio.</p>
               <div class="contact-fields"><label><span>Nome completo</span><input name="nome" autocomplete="name" placeholder="Como podemos chamar você?" required /></label><div class="contact-grid"><label><span>WhatsApp</span><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(93) 99999-9999" required /></label><label><span>Cidade</span><input name="cidade" autocomplete="address-level2" value="Santarém" required /></label></div></div>
               <p class="privacy"><span aria-hidden="true">◇</span> Seus dados serão usados apenas para este atendimento.</p>

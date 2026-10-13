@@ -161,6 +161,12 @@
   place-items: center;
 }
 
+.location-grid .goal-symbol {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
 .goal strong,
 .choice-copy strong {
   color: var(--ink);
