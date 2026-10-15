@@ -15,6 +15,13 @@ const stepLabel = document.querySelector('#step-label');
 const stepTitle = document.querySelector('#step-title');
 const progressBar = document.querySelector('#progress-bar');
 const titles = ['Unidade de atendimento', 'Seu objetivo', 'Valor desejado', 'Entrada disponível', 'Parcela mensal', 'Prazo', 'Seus dados'];
+const whatsappRecipients = {
+  'MA Comércio Santarém': {
+    vehicle: '559381047179',
+    property: '559384076280',
+  },
+  'MA Comércio Manaus': '559286188099',
+};
 const metaCapiUrl = import.meta.env.VITE_META_CAPI_URL;
 const attributionKeys = [
   'origem_conta',
@@ -50,6 +57,13 @@ function splitName(fullName) {
 
 function createEventId() {
   return `lead_${crypto.randomUUID()}`;
+}
+
+function getWhatsAppRecipient(unit, goal) {
+  if (unit === 'MA Comércio Manaus') return whatsappRecipients[unit];
+  return goal === 'Crédito para veículo'
+    ? whatsappRecipients['MA Comércio Santarém'].vehicle
+    : whatsappRecipients['MA Comércio Santarém'].property;
 }
 
 function isStepValid() {
@@ -103,6 +117,8 @@ form.addEventListener('submit', (event) => {
   const whatsapp = String(data.get('whatsapp'));
   const city = String(data.get('cidade'));
   const unit = String(data.get('unidade'));
+  const goal = String(data.get('objetivo'));
+  const recipient = getWhatsAppRecipient(unit, goal);
   const { firstName, lastName } = splitName(fullName);
   const eventId = createEventId();
   const message = [
@@ -112,13 +128,13 @@ form.addEventListener('submit', (event) => {
     `WhatsApp: ${whatsapp}`,
     `Cidade: ${city}`,
     `Unidade desejada: ${unit}`,
-    `Objetivo: ${data.get('objetivo')}`,
+    `Objetivo: ${goal}`,
     `Valor aproximado: ${Number(data.get('valor')).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}`,
     `Entrada disponível: ${data.get('entrada')}`,
     `Parcela ideal: ${data.get('parcela')}`,
     `Prazo: ${data.get('prazo')}`,
   ].join('\n');
-  const whatsappUrl = `https://wa.me/5593991207140?text=${encodeURIComponent(message)}`;
+  const whatsappUrl = `https://wa.me/${recipient}?text=${encodeURIComponent(message)}`;
 
   submitButton.disabled = true;
   submitButton.textContent = 'Enviando simulação…';
@@ -140,7 +156,8 @@ form.addEventListener('submit', (event) => {
           whatsapp,
           cidade: city,
           unidade: unit,
-          objetivo: data.get('objetivo'),
+          objetivo: goal,
+          whatsapp_destino: recipient,
           valor: Number(data.get('valor')),
           entrada: data.get('entrada'),
           parcela: data.get('parcela'),
