@@ -9,3 +9,4 @@ nav{color:var(--ink)}nav a:hover,.text-link:hover{color:var(--orange)}
 .proof{background:#fff;color:var(--ink)}.section-heading.light .eyebrow{color:var(--orange)}.section-heading.light>p:last-child{color:var(--muted)}
 .proof-card{background:#f7eee9}.process{background:#fff}.process-grid{border-top-color:#eeded4}.process article{border-right-color:#eeded4}
 footer{background:#442014}footer small{color:#ffb17c}.footer-brand p{color:#f4d8c8}
+.footer-social,.footer-locations{display:flex;flex-direction:column;gap:7px;margin:0}.footer-social>span,.footer-locations>span{color:#ffb17c;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.footer-social a{display:inline-flex;align-items:center;gap:8px}.footer-social svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}.footer-locations b{font-size:14px;font-weight:600}
