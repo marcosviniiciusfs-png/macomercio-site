@@ -22,6 +22,11 @@ const whatsappRecipients = {
   },
   'MA Comércio Manaus': '559286188099',
 };
+const santaremVehicleGoals = new Set([
+  'Crédito para veículo',
+  'Crédito para embarcação',
+  'Crédito para pesados',
+]);
 const metaCapiUrl = import.meta.env.VITE_META_CAPI_URL;
 const attributionKeys = [
   'origem_conta',
@@ -61,7 +66,7 @@ function createEventId() {
 
 function getWhatsAppRecipient(unit, goal) {
   if (unit === 'MA Comércio Manaus') return whatsappRecipients[unit];
-  return goal === 'Crédito para veículo'
+  return santaremVehicleGoals.has(goal)
     ? whatsappRecipients['MA Comércio Santarém'].vehicle
     : whatsappRecipients['MA Comércio Santarém'].property;
 }
