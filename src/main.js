@@ -28,6 +28,7 @@ const santaremVehicleGoals = new Set([
   'Crédito para pesados',
 ]);
 const metaCapiUrl = import.meta.env.VITE_META_CAPI_URL;
+const leadsApiUrl = 'https://ma-comercio-leads-api.hurtz-assistente.workers.dev/leads';
 const attributionKeys = [
   'origem_conta',
   'utm_source',
@@ -144,6 +145,29 @@ form.addEventListener('submit', (event) => {
   submitButton.disabled = true;
   submitButton.textContent = 'Enviando simulação…';
   window.fbq?.('track', 'Lead', {}, { eventID: eventId });
+
+  void fetch(leadsApiUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    keepalive: true,
+    body: JSON.stringify({
+      id: eventId,
+      nome: fullName,
+      whatsapp,
+      cidade: city,
+      unidade: unit,
+      objetivo: goal,
+      valor: Number(data.get('valor')),
+      entrada: data.get('entrada'),
+      parcela: data.get('parcela'),
+      prazo: data.get('prazo'),
+      whatsapp_destino: recipient,
+      source_url: window.location.href,
+      attribution,
+    }),
+  }).catch(() => {
+    // Lead capture must not prevent the planned WhatsApp redirection.
+  });
 
   if (metaCapiUrl) {
     // Keep the lead submission alive after navigation without making the user

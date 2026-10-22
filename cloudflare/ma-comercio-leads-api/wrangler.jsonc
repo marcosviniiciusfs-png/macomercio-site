@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../node_modules/wrangler/config-schema.json",
+  "name": "ma-comercio-leads-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-22",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "logs": { "head_sampling_rate": 0.1 }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ma-comercio-leads",
+      "database_id": "3cf5b589-778c-44cd-a2bf-20766b47108d"
+    }
+  ],
+  "vars": {
+    "ALLOWED_ORIGINS": "https://macomercio.simulead.com.br,https://marcosviniiciusfs-png.github.io,http://localhost:5173,http://127.0.0.1:5173"
+  }
+}
