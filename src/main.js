@@ -164,6 +164,8 @@ form.addEventListener('submit', (event) => {
       whatsapp_destino: recipient,
       source_url: window.location.href,
       attribution,
+      fbp: getCookie('_fbp'),
+      fbc: getCookie('_fbc'),
     }),
   }).catch(() => {
     // Lead capture must not prevent the planned WhatsApp redirection.

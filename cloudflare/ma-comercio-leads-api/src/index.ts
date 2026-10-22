@@ -1,6 +1,9 @@
 interface Env {
   DB: D1Database;
   ALLOWED_ORIGINS: string;
+  META_PIXEL_ID: string;
+  META_GRAPH_API_VERSION: string;
+  META_CAPI_ACCESS_TOKEN: string;
 }
 
 type Lead = {
@@ -17,6 +20,8 @@ type Lead = {
   whatsapp_destino: string;
   source_url: string;
   attribution?: Record<string, string>;
+  fbp?: string;
+  fbc?: string;
 };
 
 const json = (body: unknown, status = 200, headers: HeadersInit = {}) =>
@@ -33,6 +38,59 @@ const corsHeaders = (origin: string) => ({
 });
 
 const isText = (value: unknown, maxLength: number) => typeof value === "string" && value.trim().length > 0 && value.length <= maxLength;
+
+const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+const normalizePhone = (value: string) => {
+  const digits = value.replace(/\D/g, "");
+  return digits.startsWith("55") ? digits : `55${digits}`;
+};
+const sha256 = async (value: string) => {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+};
+
+const sendMetaLead = async (lead: Lead, request: Request, env: Env) => {
+  const name = lead.nome.trim().split(/\s+/);
+  const userData: Record<string, string | string[]> = {
+    client_ip_address: request.headers.get("CF-Connecting-IP") ?? "",
+    client_user_agent: request.headers.get("User-Agent") ?? "",
+    ph: [await sha256(normalizePhone(lead.whatsapp))],
+  };
+  if (name[0]) userData.fn = [await sha256(normalize(name[0]))];
+  if (name.length > 1) userData.ln = [await sha256(normalize(name.slice(1).join(" ")) )];
+  if (lead.cidade) userData.ct = [await sha256(normalize(lead.cidade))];
+  if (lead.fbp) userData.fbp = lead.fbp;
+  if (lead.fbc) userData.fbc = lead.fbc;
+
+  const response = await fetch(
+    `https://graph.facebook.com/${encodeURIComponent(env.META_GRAPH_API_VERSION)}/${encodeURIComponent(env.META_PIXEL_ID)}/events`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        data: [{
+          event_name: "Lead",
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: lead.id,
+          event_source_url: lead.source_url,
+          action_source: "website",
+          user_data: userData,
+          custom_data: {
+            content_name: "Simulador MA Comércio",
+            content_category: lead.objetivo,
+            value: lead.valor,
+            currency: "BRL",
+            unidade: lead.unidade,
+            ...lead.attribution,
+          },
+        }],
+        access_token: env.META_CAPI_ACCESS_TOKEN,
+      }),
+    },
+  );
+  const body = await response.json<{ events_received?: number; error?: { message?: string } }>().catch(() => ({}));
+  return { success: response.ok && body.events_received === 1, status: response.status, error: body.error?.message };
+};
 
 const isLead = (value: unknown): value is Lead => {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
@@ -75,7 +133,13 @@ export default {
           lead.prazo ?? null, lead.whatsapp_destino.trim(), lead.source_url, JSON.stringify(lead.attribution ?? {}),
         )
         .run();
-      return json({ success: true }, 201, cors);
+      const meta = await sendMetaLead(lead, request, env).catch((error) => ({
+        success: false,
+        status: 0,
+        error: error instanceof Error ? error.message : "Meta request failed",
+      }));
+      console.log(JSON.stringify({ message: "lead processed", lead_id: lead.id, meta_success: meta.success, meta_status: meta.status }));
+      return json({ success: true, meta: { success: meta.success } }, 201, cors);
     } catch {
       return json({ success: false, error: "Invalid request" }, 400, cors);
     }
