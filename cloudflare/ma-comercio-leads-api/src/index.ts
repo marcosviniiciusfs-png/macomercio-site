@@ -4,6 +4,7 @@ interface Env {
   META_PIXEL_ID: string;
   META_GRAPH_API_VERSION: string;
   META_CAPI_ACCESS_TOKEN: string;
+  CRM_WEBHOOK_URL: string;
 }
 
 type Lead = {
@@ -92,6 +93,35 @@ const sendMetaLead = async (lead: Lead, request: Request, env: Env) => {
   return { success: response.ok && body.events_received === 1, status: response.status, error: body.error?.message };
 };
 
+const sendCrmLead = async (lead: Lead, env: Env) => {
+  const response = await fetch(env.CRM_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: lead.nome,
+      nome: lead.nome,
+      phone: normalizePhone(lead.whatsapp),
+      whatsapp: lead.whatsapp,
+      city: lead.cidade,
+      cidade: lead.cidade,
+      unit: lead.unidade,
+      unidade: lead.unidade,
+      objective: lead.objetivo,
+      objetivo: lead.objetivo,
+      value: lead.valor ?? null,
+      valor: lead.valor ?? null,
+      entrada: lead.entrada ?? null,
+      parcela: lead.parcela ?? null,
+      prazo: lead.prazo ?? null,
+      source: "site_ma_comercio",
+      source_url: lead.source_url,
+      lead_id: lead.id,
+      ...lead.attribution,
+    }),
+  });
+  return { success: response.ok, status: response.status };
+};
+
 const isLead = (value: unknown): value is Lead => {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const lead = value as Record<string, unknown>;
@@ -133,13 +163,19 @@ export default {
           lead.prazo ?? null, lead.whatsapp_destino.trim(), lead.source_url, JSON.stringify(lead.attribution ?? {}),
         )
         .run();
-      const meta = await sendMetaLead(lead, request, env).catch((error) => ({
-        success: false,
-        status: 0,
-        error: error instanceof Error ? error.message : "Meta request failed",
+      const [meta, crm] = await Promise.all([
+        sendMetaLead(lead, request, env).catch(() => ({ success: false, status: 0 })),
+        sendCrmLead(lead, env).catch(() => ({ success: false, status: 0 })),
+      ]);
+      console.log(JSON.stringify({
+        message: "lead processed",
+        lead_id: lead.id,
+        meta_success: meta.success,
+        meta_status: meta.status,
+        crm_success: crm.success,
+        crm_status: crm.status,
       }));
-      console.log(JSON.stringify({ message: "lead processed", lead_id: lead.id, meta_success: meta.success, meta_status: meta.status }));
-      return json({ success: true, meta: { success: meta.success } }, 201, cors);
+      return json({ success: true, meta: { success: meta.success }, crm: { success: crm.success } }, 201, cors);
     } catch {
       return json({ success: false, error: "Invalid request" }, 400, cors);
     }
