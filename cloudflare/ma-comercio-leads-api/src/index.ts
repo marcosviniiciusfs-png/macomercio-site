@@ -5,6 +5,7 @@ interface Env {
   META_GRAPH_API_VERSION: string;
   META_CAPI_ACCESS_TOKEN: string;
   CRM_WEBHOOK_URL: string;
+  KAIROZ_WEBHOOK_URL?: string;
 }
 
 type Lead = {
@@ -122,6 +123,45 @@ const sendCrmLead = async (lead: Lead, env: Env) => {
   return { success: response.ok, status: response.status };
 };
 
+// Segundo CRM. A URL do webhook contém o token, por isso fica em um secret do Worker.
+const sendKairozLead = async (lead: Lead, env: Env) => {
+  if (!env.KAIROZ_WEBHOOK_URL) return { success: false, status: 0 };
+  const valor = lead.valor
+    ? lead.valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 })
+    : null;
+  const respostas: Record<string, string> = {
+    Cidade: lead.cidade,
+    "Unidade desejada": lead.unidade,
+    Objetivo: lead.objetivo,
+  };
+  if (valor) respostas["Valor aproximado"] = valor;
+  if (lead.entrada) respostas["Entrada disponível"] = lead.entrada;
+  if (lead.parcela) respostas["Parcela ideal"] = lead.parcela;
+  if (lead.prazo) respostas.Prazo = lead.prazo;
+
+  const response = await fetch(env.KAIROZ_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      nome: lead.nome.trim(),
+      telefone: normalizePhone(lead.whatsapp),
+      tipo: lead.objetivo,
+      origem: "Site MA Comércio - Simulação de crédito",
+      pagina: lead.source_url,
+      observacoes: Object.entries(respostas).map(([label, value]) => `${label}: ${value}`).join("\n"),
+      respostas,
+      utm_source: lead.attribution?.utm_source,
+      utm_medium: lead.attribution?.utm_medium,
+      utm_campaign: lead.attribution?.utm_campaign,
+      utm_content: lead.attribution?.utm_content,
+      utm_term: lead.attribution?.utm_term,
+      event_id: lead.id,
+    }),
+  });
+  const body = await response.json<{ success?: boolean }>().catch(() => ({}));
+  return { success: response.ok && body.success !== false, status: response.status };
+};
+
 const isLead = (value: unknown): value is Lead => {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const lead = value as Record<string, unknown>;
@@ -163,9 +203,10 @@ export default {
           lead.prazo ?? null, lead.whatsapp_destino.trim(), lead.source_url, JSON.stringify(lead.attribution ?? {}),
         )
         .run();
-      const [meta, crm] = await Promise.all([
+      const [meta, crm, kairoz] = await Promise.all([
         sendMetaLead(lead, request, env).catch(() => ({ success: false, status: 0 })),
         sendCrmLead(lead, env).catch(() => ({ success: false, status: 0 })),
+        sendKairozLead(lead, env).catch(() => ({ success: false, status: 0 })),
       ]);
       console.log(JSON.stringify({
         message: "lead processed",
@@ -174,8 +215,15 @@ export default {
         meta_status: meta.status,
         crm_success: crm.success,
         crm_status: crm.status,
+        kairoz_success: kairoz.success,
+        kairoz_status: kairoz.status,
       }));
-      return json({ success: true, meta: { success: meta.success }, crm: { success: crm.success } }, 201, cors);
+      return json({
+        success: true,
+        meta: { success: meta.success },
+        crm: { success: crm.success },
+        kairoz: { success: kairoz.success },
+      }, 201, cors);
     } catch {
       return json({ success: false, error: "Invalid request" }, 400, cors);
     }
