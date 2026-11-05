@@ -123,8 +123,11 @@ const sendCrmLead = async (lead: Lead, env: Env) => {
   return { success: response.ok, status: response.status };
 };
 
-// Segundo CRM. A URL do webhook contém o token, por isso fica em um secret do Worker.
+// Segundo CRM, só para a unidade de Manaus. A URL do webhook contém o token, por isso fica em um secret do Worker.
+const isManausLead = (lead: Lead) => normalize(lead.unidade) === normalize("MA Comércio Manaus");
+
 const sendKairozLead = async (lead: Lead, env: Env) => {
+  if (!isManausLead(lead)) return { success: false, status: 0, skipped: true };
   if (!env.KAIROZ_WEBHOOK_URL) return { success: false, status: 0 };
   const valor = lead.valor
     ? lead.valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 })
@@ -217,6 +220,7 @@ export default {
         crm_status: crm.status,
         kairoz_success: kairoz.success,
         kairoz_status: kairoz.status,
+        kairoz_skipped: "skipped" in kairoz,
       }));
       return json({
         success: true,
