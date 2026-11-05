@@ -22,6 +22,10 @@ const whatsappRecipients = {
   },
   'MA Comércio Manaus': '559286188099',
 };
+const unitCities = {
+  'MA Comércio Santarém': 'Santarém',
+  'MA Comércio Manaus': 'Manaus',
+};
 const santaremVehicleGoals = new Set([
   'Crédito para veículo',
   'Crédito para embarcação',
@@ -99,6 +103,16 @@ form.addEventListener('input', (event) => {
     if (digits.length <= 2) event.target.value = digits;
     else if (digits.length <= 7) event.target.value = `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
     else event.target.value = `(${digits.slice(0, 2)}) ${digits.slice(2, digits.length === 11 ? 7 : 6)}-${digits.slice(digits.length === 11 ? 7 : 6)}`;
+  }
+  if (event.target instanceof HTMLInputElement && event.target.name === 'cidade') {
+    event.target.dataset.edited = 'true';
+  }
+  // Sugere a cidade da unidade escolhida, sem sobrescrever o que o lead digitou.
+  if (event.target instanceof HTMLInputElement && event.target.name === 'unidade') {
+    const cityInput = form.elements.namedItem('cidade');
+    if (cityInput instanceof HTMLInputElement && !cityInput.dataset.edited) {
+      cityInput.value = unitCities[event.target.value] ?? '';
+    }
   }
   nextButton.disabled = !isStepValid();
   submitButton.disabled = !isStepValid();
